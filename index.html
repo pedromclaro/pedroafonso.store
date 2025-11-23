@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pedro Afonso Store</title>
+    <style>
+        /* --- RESET & VARIAVEIS --- */
+        :root {
+            --bg-color: #f5f5f7;
+            --card-bg: #ffffff;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent-color: #000000; /* Botão Preto */
+            --accent-hover: #333333;
+            --radius-card: 24px;
+            --radius-btn: 980px;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-stack);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* --- HEADER (Overlay) --- */
+        header {
+            position: absolute; /* Fica por cima do Hero */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding-top: 20px;
+        }
+
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: center; /* Centralizado no mobile */
+        }
+
+        @media (min-width: 768px) {
+            .nav-container { justify-content: space-between; }
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+            /* Fundo de vidro leve para garantir leitura se passar algo atrás */
+            background: rgba(255,255,255,0.5);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        /* --- HERO FULL SCREEN --- */
+        .hero {
+            /* Ocupa 100% da altura da viewport dinâmica (ajusta barra navegador) */
+            height: 100dvh; 
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 24px;
+            position: relative;
+            /* Degradê Apple muito sutil */
+            background: radial-gradient(circle at 50% 30%, rgba(200,200,200,0.15), transparent 50%);
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .title-wrapper {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: bottom;
+            height: 1.2em; /* Altura fixa para evitar pulos */
+        }
+
+        #changing-text {
+            display: inline-block;
+            color: var(--text-primary); 
+            background: -webkit-linear-gradient(45deg, #000, #555);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Classes de animação */
+        .text-slide-up-in { animation: slideUpIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .text-slide-up-out { animation: slideUpOut 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideUpIn { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideUpOut { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-100%); opacity: 0; } }
+
+        .hero h2 {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: 0;
+            opacity: 0.9;
+        }
+
+        /* Indicador de Scroll (Seta pulando) */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.6;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        .scroll-text {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .chevron {
+            width: 20px;
+            height: 20px;
+            border-right: 2px solid var(--text-primary);
+            border-bottom: 2px solid var(--text-primary);
+            transform: rotate(45deg);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
+            40% {transform: translateX(-50%) translateY(-10px);}
+            60% {transform: translateX(-50%) translateY(-5px);}
+        }
+
+        /* --- FEATURES BAR (Agora fora do Hero) --- */
+        .features-bar {
+            background: #ffffff;
+            padding: 60px 24px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 10px;
+        }
+
+        .feature-icon { font-size: 1.8rem; }
+        .feature-text strong { display: block; color: var(--text-primary); font-size: 1.1rem; margin-bottom: 4px; }
+        .feature-text p { font-size: 0.9rem; color: var(--text-secondary); }
+
+        /* --- PRODUTOS --- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            text-align: left;
+            letter-spacing: -0.5px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr; 
+            gap: 40px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            padding: 40px;
+            box-shadow: 0px 4px 24px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: contain;
+            margin-bottom: 30px;
+            filter: drop-shadow(0px 10px 20px rgba(0,0,0,0.08));
+        }
+
+        .product-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .product-desc {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+
+        .price-container {
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .price-market-badge {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background: #f2f2f2;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        .price-market-badge span { text-decoration: line-through; }
+
+        .price-current {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -1px;
+        }
+
+        .btn-buy {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 16px 40px;
+            border-radius: var(--radius-btn);
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            width: 100%;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .btn-buy:hover { background-color: var(--accent-hover); transform: translateY(-2px); }
+        .btn-buy:active { transform: scale(0.98); }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #ffffff; /* Footer branco para limpar visual */
+            border-top: 1px solid rgba(0,0,0,0.08);
+            padding: 80px 24px 40px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .footer-links a { color: var(--text-primary); margin-bottom: 10px; display: block; font-weight: 500;}
+
+        .footer-bottom {
+            max-width: 1000px;
+            margin: 40px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* --- MEDIA QUERIES --- */
+        @media (min-width: 768px) {
+            .hero h1 { font-size: 5rem; gap: 16px; flex-direction: row;}
+            .features-grid { grid-template-columns: repeat(3, 1fr); text-align: left; }
+            .product-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+            .footer-content { flex-direction: row; justify-content: space-between; }
+            .footer-bottom { flex-direction: row; justify-content: space-between; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">Pedro Afonso Store</div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>
+                Tecnologia 
+                <div class="title-wrapper">
+                    <span id="changing-text">Pro.</span>
+                </div>
+            </h1>
+            <h2>Já no Brasil. Sem taxas.</h2>
+        </div>
+
+        <div class="scroll-indicator" onclick="document.querySelector('.features-bar').scrollIntoView({behavior: 'smooth'})">
+            <span class="scroll-text">Descubra</span>
+            <div class="chevron"></div>
+        </div>
+    </section>
+
+    <section class="features-bar">
+        <div class="features-grid">
+            <div class="feature-item">
+                <span class="feature-icon">📦</span>
+                <div class="feature-text">
+                    <strong>Pronta Entrega</strong>
+                    <p>Sem espera. Estoque no Brasil.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                 <span class="feature-icon">🤝</span>
+                 <div class="feature-text">
+                     <strong>Teste na Hora</strong>
+                     <p>Retire em mãos e confira.</p>
+                 </div>
+            </div>
+            <div class="feature-item">
+                 <span class="feature-icon">🛡️</span>
+                 <div class="feature-text">
+                     <strong>Compra Segura</strong>
+                     <p>Pagamento na retirada.</p>
+                 </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <h3 class="section-title">Disponíveis agora</h3>
+        <div class="product-grid" id="product-list">
+            </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <strong style="color: var(--text-primary); font-size: 1.1rem;">Pedro Afonso Store</strong>
+                <p style="margin-top: 12px; max-width: 300px;">Curadoria de periféricos importados com segurança, agilidade e preço justo em Minas Gerais.</p>
+            </div>
+            
+            <div class="footer-links">
+                <a href="#">Falar no WhatsApp</a>
+                <a href="https://instagram.com/pedroafonso.store" target="_blank">Instagram</a>
+                <a href="#">Termos e Garantia</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Pedro Afonso Store.</p>
+            <p>Design Minimalista.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- SEU WHATSAPP ---
+        const myWhatsApp = "5531999999999"; 
+
+        // --- ANIMAÇÃO DO TEXTO ---
+        const words = ["Pro.", "Imediata.", "Sem Taxas.", "Premium."];
+        let currentWordIndex = 0;
+        const textElement = document.getElementById("changing-text");
+
+        function rotateText() {
+            textElement.classList.remove("text-slide-up-in");
+            textElement.classList.add("text-slide-up-out");
+            setTimeout(() => {
+                currentWordIndex = (currentWordIndex + 1) % words.length;
+                textElement.textContent = words[currentWordIndex];
+                textElement.classList.remove("text-slide-up-out");
+                textElement.classList.add("text-slide-up-in");
+            }, 800); // Ajustei o tempo para ser mais suave
+        }
+        setInterval(rotateText, 3500);
+
+        // --- PRODUTOS ---
+        const products = [
+            {
+                id: 1,
+                name: "Keychron K2 Pro",
+                desc: "Wireless QMK/VIA. Switch Brown. A melhor escolha para produtividade.",
+                priceMarket: 1100.00,
+                priceStore: 850.00,
+                image: "https://placehold.co/400x300/png?text=Keychron+K2&bg=ffffff00" 
+            },
+            {
+                id: 2,
+                name: "Logitech MX Master 3S",
+                desc: "Cinza grafite. Clique silencioso e scroll infinito. Lacrado.",
+                priceMarket: 650.00,
+                priceStore: 520.00,
+                image: "https://placehold.co/400x300/png?text=MX+Master+3S&bg=ffffff00" 
+            },
+             {
+                id: 3,
+                name: "Fifine AM8 USB/XLR",
+                desc: "Microfone dinâmico com RGB controlado. Qualidade de estúdio.",
+                priceMarket: 480.00,
+                priceStore: 350.00,
+                image: "https://placehold.co/400x300/png?text=Fifine+AM8&bg=ffffff00" 
+            }
+        ];
+
+        const productList = document.getElementById('product-list');
+
+        products.forEach(product => {
+            const formatPrice = (value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            const waMessage = `Olá Pedro! Tenho interesse no *${product.name}* de ${formatPrice(product.priceStore)}.`;
+            const waLink = `https://wa.me/${myWhatsApp}?text=${encodeURIComponent(waMessage)}`;
+
+            const html = `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-desc">${product.desc}</div>
+                    
+                    <div class="price-container">
+                        <div class="price-market-badge">ML: <span>${formatPrice(product.priceMarket)}</span></div>
+                        <div class="price-current">${formatPrice(product.priceStore)}</div>
+                    </div>
+
+                    <a href="${waLink}" target="_blank" class="btn-buy">Comprar</a>
+                </div>
+            `;
+            productList.innerHTML += html;
+        });
+    </script>
+
+</body>
+</html>
